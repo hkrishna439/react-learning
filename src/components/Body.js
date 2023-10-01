@@ -10,6 +10,7 @@ import { FETCH_DATA_API } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { storeInfo } from "../utils/infoSlice";
 import BestOffers from "./BestOffers";
+import Footer from "./Footer";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -46,13 +47,13 @@ const Body = () => {
     );
   };
 
-  const setResListListner = () => {
-    setFilteredRestaurant(() => {
-      return filteredRestaurant.filter(
-        (restaurant) => restaurant.info.avgRating >= 4.3
-      );
-    });
-  };
+  // const setResListListner = () => {
+  //   setFilteredRestaurant(() => {
+  //     return filteredRestaurant.filter(
+  //       (restaurant) => restaurant.info.avgRating >= 4.3
+  //     );
+  //   });
+  // };
 
   const onlineStatus = useOnlineStatus();
 
@@ -64,32 +65,9 @@ const Body = () => {
   return filteredRestaurant && filteredRestaurant.length === 0 ? (
     <Shimmer />
   ) : (
-    <div className="mx-32">
-      <div className="flex">
-        <div className="m-4 p-4">
-          <input
-            type="text"
-            className="border border-solid border-black"
-            value={searchText}
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
-          ></input>
-          <button
-            className="px-4 py-1 bg-green-100 m-4 rounded-lg"
-            onClick={() => {
-              setFilteredRestaurant(() => {
-                return resList.filter((restaurant) =>
-                  restaurant.info.name
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase())
-                );
-              });
-            }}
-          >
-            Search
-          </button>
-        </div>
+    <div>
+      <div className="mx-32 my-6">
+        {/* <div className="flex">
         <div className="m-4 p-4 flex items-center ">
           <button
             className="px-4 py-1 bg-gray-100 m-4 rounded-lg"
@@ -98,28 +76,30 @@ const Body = () => {
             Top Rated Restaurants
           </button>
         </div>
+      </div> */}
+        <BestOffers />
+        <OnYourMind />
+        <hr className="p-6 m-6" />
+        <h1 className="font-bold text-2xl mb-6 ml-8">
+          Top restaurant chains in Bangalore
+        </h1>
+        <div className="flex flex-wrap justify-center">
+          {filteredRestaurant &&
+            filteredRestaurant.map((restaurant) => (
+              <Link
+                to={"/restaurants/" + restaurant.info.id}
+                key={restaurant.info.id}
+              >
+                {restaurant.info.promoted === true ? (
+                  <RestaurantCardPromoted resData={restaurant} />
+                ) : (
+                  <RestaurantCard resData={restaurant} />
+                )}
+              </Link>
+            ))}
+        </div>
       </div>
-      <BestOffers />
-      <OnYourMind />
-      <hr className="p-6 m-6" />
-      <h1 className="font-bold text-3xl mb-6 ml-8">
-        Top restaurant chains in Bangalore
-      </h1>
-      <div className="flex flex-wrap justify-center">
-        {filteredRestaurant &&
-          filteredRestaurant.map((restaurant) => (
-            <Link
-              to={"/restaurants/" + restaurant.info.id}
-              key={restaurant.info.id}
-            >
-              {restaurant.info.promoted === true ? (
-                <RestaurantCardPromoted resData={restaurant} />
-              ) : (
-                <RestaurantCard resData={restaurant} />
-              )}
-            </Link>
-          ))}
-      </div>
+      <Footer />
     </div>
   );
 };

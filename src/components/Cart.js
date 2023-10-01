@@ -1,39 +1,32 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ItemList from "./ItemList";
 import { clearCart } from "../utils/cartSlice";
 import ItemCard from "./ItemCard";
-import { Link } from "react-router-dom";
+import useRestaurantMenu from "../utils/useRestaurantMenu";
+import { CDN_URL } from "../utils/constants";
+import EmptyCart from "./EmptyCart";
+import Shimmer from "./Shimmer";
 
 const Cart = () => {
   // Make sure you are subscribing to the right portion of the store - here you can optimize the performance
-  const cartItems = useSelector((store) => store.cart.items);
-  const totalAmount = useSelector((store) => store.cart.totalAmount);
+  const cartStore = useSelector((store) => store.cart);
   const dispatch = useDispatch();
   const handleClearCart = () => {
     dispatch(clearCart());
   };
 
+  const resInfo = useRestaurantMenu(cartStore.resId);
+
+  if (!resInfo) {
+    return cartStore.items.length === 0 ? <EmptyCart /> : <Shimmer />;
+  }
+
+  const { name, cloudinaryImageId, areaName } =
+    resInfo && resInfo?.cards[0]?.card?.card?.info;
   return (
     <div className="flex justify-center bg-gray-100 h-screen">
-      {cartItems.length === 0 ? (
-        <div className="m-72 flex flex-col  items-center justify-between">
-          <img
-            className="w-72 h-72 "
-            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/2xempty_cart_yfxml0"
-            alt=""
-          />
-          <h1 className="font-bold text-xl mt-6">Your cart is empty</h1>
-          <p className="text-gray-400 m-2">
-            You can go to home page to view more restaurant
-          </p>
-          <Link
-            to="/"
-            className="bg-red-300 px-4 py-3 m-6 text-center font-bold cursor-pointer"
-          >
-            SEE RESTAURANTS NEAR YOU
-          </Link>
-        </div>
+      {cartStore.items.length === 0 ? (
+        <EmptyCart />
       ) : (
         <div className="flex p-4 w-11/12">
           {/* <h1 className="text-xl font-bold"> Cart</h1>
@@ -50,19 +43,46 @@ const Cart = () => {
      </div>
        */}
 
-          <div className="w-3/4 h-2/4 m-4 p-4 shadow-lg bg-white">Payment</div>
-          <div className="shadow-lg m-4 p-4 w-1/3 h-4/5 bg-white flex flex-col justify-between">
-            <div className="">Restaurant</div>
+          <div className="w-3/4 h-3/4 m-4 p-4 shadow-lg bg-white ">
+            <h1 className="font-bold text-lg m-2 p-2">
+              Choose a adelivery address
+            </h1>
+            <div className="m-6 p-6 border border-gray-300 flex flex-col justify-start">
+              <h1 className="font-bold text-lg m-2 p-2">🏠 Home</h1>
+              <p className="m-2 p-2">
+                16, 4th cross, shanthi layout, ramamurthy nagar, bengalore
+                560016
+                <button className="p-2 my-4 bg-green-300 block font-bold">
+                  DELIVER HERE
+                </button>
+              </p>
+            </div>
+          </div>
+          <div className="shadow-lg m-4 p-4 w-3/6 h-4/5 max-h-screen bg-white flex flex-col justify-between">
+            <div className="flex items-center">
+              <img
+                className="h-14 w-14 shadow-2xl m-4"
+                src={CDN_URL + cloudinaryImageId}
+                alt="res-log"
+              />
+              <div className="flex flex-col">
+                <h1 className="font-bold">{name}</h1>
+                <p className="text-gray-400">{areaName}</p>
+              </div>
+            </div>
             <div className="my-2 h-4/5 overflow-y-scroll">
-              {cartItems.map((cartItem) => (
-                <ItemCard cartItem={cartItem} key={cartItem?.card?.info?.id} />
+              {cartStore.items.map((cartItem) => (
+                <ItemCard
+                  cartItem={cartItem}
+                  key={cartItem?.item?.card?.info?.id}
+                />
               ))}
             </div>
             <hr className="border border-solid border-black h-1 bg-black" />
 
             <div className="my-2 font-bold flex justify-between">
               <span>TO PAY</span>
-              <span>₹{totalAmount.toFixed(2)}</span>
+              <span>₹{cartStore.totalAmount}</span>
             </div>
           </div>
         </div>

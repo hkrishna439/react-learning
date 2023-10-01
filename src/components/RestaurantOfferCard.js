@@ -4,8 +4,8 @@ import { off } from "process";
 
 const RestaurantOfferCard = ({ offer }) => {
   return (
-    <div className="flex flex-col border border-gray-300 m-4 p-4 rounded-lg w-3/4">
-      <div className="flex font-bold text-xl">
+    <div className="flex flex-col border border-gray-300 m-2 p-2 rounded-lg">
+      <div className="flex font-bold text-lg w-64">
         <div className="mr-4">
           {offer?.info?.offerLogo === "offers/generic" ? (
             <img src={CDN_URL_GENERIC} alt="" />
@@ -17,10 +17,10 @@ const RestaurantOfferCard = ({ offer }) => {
             />
           )}
         </div>
-        <h1>{offer?.info?.header}</h1>
+        <h1 className="text-gray-500">{offer?.info?.header}</h1>
       </div>
       <div>
-        <p>
+        <p className="text-gray-400">
           {offer?.info?.couponCode}|{offer?.info?.description}
         </p>
       </div>

@@ -7,7 +7,7 @@ const OnYourMind = () => {
   const dishList = resInfo?.card?.card?.gridElements?.infoWithStyle?.info;
   return (
     <div>
-      <h1 className="font-bold text-3xl ml-8">
+      <h1 className="font-bold text-2xl ml-8">
         {resInfo?.card?.card?.header?.title}
       </h1>
       <div className="flex overflow-x-scroll">

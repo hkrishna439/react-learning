@@ -10,7 +10,7 @@ const BestOffers = () => {
   );
   return (
     <div>
-      <h1 className="font-bold text-3xl ml-8">Best offers for you </h1>
+      <h1 className="font-bold text-2xl ml-8">Best offers for you </h1>
       <div className="flex overflow-x-scroll">
         <div className="flex m-4">
           {offersList &&

@@ -10,21 +10,21 @@ const RestaurantCard = (props) => {
     resData.info;
   // const { header, subHeader } = resData.info.aggregatedDiscountInfoV3;
   return (
-    <div className="m-4 w-72 break-words rounded-2xl ">
-      <div className="flex flex-col justify-end">
+    <div className="m-4 w-64 break-words rounded-2xl">
+      <div className="flex flex-col justify-end ">
         <div className="absolute text-white ">
-          <span className="font-bold text-2xl p-2">
+          <span className="font-bold text-xl p-2">
             {resData.info.aggregatedDiscountInfoV3 &&
               resData.info.aggregatedDiscountInfoV3.header}
           </span>
-          <span className="font-bold text-2xl p-2">
+          <span className="font-bold text-xl p-2">
             {resData.info.aggregatedDiscountInfoV3 &&
               resData.info.aggregatedDiscountInfoV3.subHeader}
           </span>
         </div>
 
         <img
-          className="rounded-2xl h-48 w-72 shadow-lg "
+          className="rounded-2xl h-44 w-64 shadow-2xl "
           src={CDN_URL + cloudinaryImageId}
           alt="res-log"
         />
