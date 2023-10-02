@@ -16,7 +16,7 @@ const Body = () => {
   const dispatch = useDispatch();
   const [resList, setResList] = useState([]);
 
-  const [filteredRestaurant, setFilteredRestaurant] = useState([]);
+  const [onlineRestaurant, setOnlineRestaurant] = useState([]);
 
   const [searchText, setSearchText] = useState("");
 
@@ -42,8 +42,8 @@ const Body = () => {
       json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
 
-    setFilteredRestaurant(
-      json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    setOnlineRestaurant(
+      json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
 
@@ -62,7 +62,7 @@ const Body = () => {
       <h1>Looks like you're offline!! Please check your internet connection</h1>
     );
   }
-  return filteredRestaurant && filteredRestaurant.length === 0 ? (
+  return resList && resList.length === 0 ? (
     <Shimmer />
   ) : (
     <div>
@@ -76,16 +76,35 @@ const Body = () => {
             Top Rated Restaurants
           </button>
         </div>
-      </div> */}
+        </div> */}
         <BestOffers />
         <OnYourMind />
         <hr className="p-6 m-6" />
         <h1 className="font-bold text-2xl mb-6 ml-8">
           Top restaurant chains in Bangalore
         </h1>
-        <div className="flex flex-wrap justify-center">
-          {filteredRestaurant &&
-            filteredRestaurant.map((restaurant) => (
+        <div className="flex justify-center overflow-x-scroll">
+          {resList &&
+            resList.map((restaurant) => (
+              <Link
+                to={"/restaurants/" + restaurant.info.id}
+                key={restaurant.info.id}
+              >
+                {restaurant.info.promoted === true ? (
+                  <RestaurantCardPromoted resData={restaurant} />
+                ) : (
+                  <RestaurantCard resData={restaurant} />
+                )}
+              </Link>
+            ))}
+        </div>
+        <hr className="p-6 m-6" />
+        <h1 className="font-bold text-2xl mb-6 ml-8">
+          Restaurants with online food delivery in Bangalore
+        </h1>
+        <div className="flex justify-center flex-wrap">
+          {onlineRestaurant &&
+            onlineRestaurant.map((restaurant) => (
               <Link
                 to={"/restaurants/" + restaurant.info.id}
                 key={restaurant.info.id}
@@ -99,6 +118,7 @@ const Body = () => {
             ))}
         </div>
       </div>
+
       <Footer />
     </div>
   );

@@ -1,7 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeItem, updateItem } from "../utils/cartSlice";
-import { useSearchParams } from "react-router-dom";
+import { removeItem, addItem } from "../utils/cartSlice";
 
 const ItemCard = ({ cartItem }) => {
   const dispatch = useDispatch();
@@ -28,7 +27,7 @@ const ItemCard = ({ cartItem }) => {
         <span
           className="text-xl text-green-500 w-full flex justify-center"
           onClick={() => {
-            dispatch(updateItem(cartItem?.item?.card?.info?.id));
+            dispatch(addItem(cartItem));
           }}
         >
           +

@@ -59,15 +59,25 @@ const Cart = () => {
             </div>
           </div>
           <div className="shadow-lg m-4 p-4 w-3/6 h-4/5 max-h-screen bg-white flex flex-col justify-between">
-            <div className="flex items-center">
-              <img
-                className="h-14 w-14 shadow-2xl m-4"
-                src={CDN_URL + cloudinaryImageId}
-                alt="res-log"
-              />
-              <div className="flex flex-col">
-                <h1 className="font-bold">{name}</h1>
-                <p className="text-gray-400">{areaName}</p>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
+                <img
+                  className="h-14 w-14 shadow-2xl m-4"
+                  src={CDN_URL + cloudinaryImageId}
+                  alt="res-log"
+                />
+                <div className="flex flex-col">
+                  <h1 className="font-bold">{name}</h1>
+                  <p className="text-gray-400">{areaName}</p>
+                </div>
+              </div>
+              <div>
+                <button
+                  className="p-2 m-2 bg-red-400 text-white rounded-lg"
+                  onClick={handleClearCart}
+                >
+                  Clear Cart
+                </button>
               </div>
             </div>
             <div className="my-2 h-4/5 overflow-y-scroll">

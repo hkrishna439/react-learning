@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { act } from "react-dom/test-utils";
 
 const cartSlice = createSlice({
   name: "cart",
@@ -9,7 +8,7 @@ const cartSlice = createSlice({
     resId: null,
   },
   reducers: {
-    addItem: (state, action) => {
+    updateItem: (state, action) => {
       // mutating the state here
       state.items.push(action.payload.item);
       state.totalAmount = parseFloat(
@@ -17,20 +16,28 @@ const cartSlice = createSlice({
       );
       state.resId = action.payload.resId;
     },
-    updateItem: (state, action) => {
+    addItem: (state, action) => {
+      const itemId = action.payload.item.item
+        ? action.payload.item.item.card.info.id
+        : action.payload.item.card.info.id;
+
       const existingCartItemIndex = state.items.findIndex((item) => {
-        return item.item.card.info.id === action.payload;
+        return item.item.card.info.id === itemId;
       });
 
       const existingCartItem = state.items[existingCartItemIndex];
-      const itemPrice = parseFloat(
-        (existingCartItem.item.card.info.price
-          ? parseFloat((existingCartItem.item.card.info.price / 100).toFixed(2))
-          : parseFloat(
-              (existingCartItem.item.card.info.defaultPrice / 100).toFixed(2)
-            )
-        ).toFixed(2)
-      );
+      const itemPrice =
+        existingCartItem &&
+        parseFloat(
+          (existingCartItem.item.card.info.price
+            ? parseFloat(
+                (existingCartItem.item.card.info.price / 100).toFixed(2)
+              )
+            : parseFloat(
+                (existingCartItem.item.card.info.defaultPrice / 100).toFixed(2)
+              )
+          ).toFixed(2)
+        );
 
       const updatedTotalAmount = state.totalAmount + itemPrice;
       let updatedItems;
@@ -41,13 +48,19 @@ const cartSlice = createSlice({
         };
         updatedItems = [...state.items];
         updatedItems[existingCartItemIndex] = updatedItem;
-      }
 
-      return {
-        items: updatedItems,
-        totalAmount: updatedTotalAmount,
-        resId: state.resId,
-      };
+        return {
+          items: updatedItems,
+          totalAmount: updatedTotalAmount,
+          resId: state.resId,
+        };
+      } else {
+        state.items.push(action.payload.item);
+        state.totalAmount = parseFloat(
+          (state.totalAmount + action.payload.price).toFixed(2)
+        );
+        state.resId = action.payload.resId;
+      }
     },
     removeItem: (state, action) => {
       const existingCartItemIndex = state.items.findIndex((item) => {

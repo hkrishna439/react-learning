@@ -17,7 +17,13 @@ const Header = () => {
   // Subscribing to the store using Selector
 
   const cartItems = useSelector((store) => store.cart.items);
-
+  // const cartLength = cartItems.reduce((item) => {
+  //   totalItems + item.count;
+  // });
+  const cartLength = cartItems.reduce(
+    (accumulator, current) => accumulator + current.amount,
+    0
+  );
   return (
     <div className="flex justify-between shadow-lg sticky top-0 bg-white z-10">
       <div className="logo-container">
@@ -58,8 +64,8 @@ const Header = () => {
           </Link> */}
           <Link to="/cart">
             <li className="px-6 text-gray-700 hover:text-red-400 h-24 flex items-center cursor-pointer">
-              <span className="flex justify-center items-center w-5 h-5 rounded-full bg-red-400 text-white m-2">
-                {cartItems.length}
+              <span className="flex justify-center items-center w-6 h-6 rounded-full bg-red-400 text-white m-2">
+                {cartLength}
               </span>
               <span>Cart</span>
             </li>

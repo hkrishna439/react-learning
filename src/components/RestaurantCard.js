@@ -11,8 +11,8 @@ const RestaurantCard = (props) => {
   // const { header, subHeader } = resData.info.aggregatedDiscountInfoV3;
   return (
     <div className="m-4 w-64 break-words rounded-2xl">
-      <div className="flex flex-col justify-end ">
-        <div className="absolute text-white ">
+      <div className="flex flex-col justify-end relative">
+        <div className="absolute text-white">
           <span className="font-bold text-xl p-2">
             {resData.info.aggregatedDiscountInfoV3 &&
               resData.info.aggregatedDiscountInfoV3.header}
