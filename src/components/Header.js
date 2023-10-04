@@ -17,9 +17,7 @@ const Header = () => {
   // Subscribing to the store using Selector
 
   const cartItems = useSelector((store) => store.cart.items);
-  // const cartLength = cartItems.reduce((item) => {
-  //   totalItems + item.count;
-  // });
+
   const cartLength = cartItems.reduce(
     (accumulator, current) => accumulator + current.amount,
     0

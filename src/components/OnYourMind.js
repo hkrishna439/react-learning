@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import DishCard from "./DishCard";
+import { Link } from "react-router-dom";
 
 const OnYourMind = () => {
   const resInfo = useSelector((store) => store.resInfo.resInfo[1]);
@@ -14,7 +15,12 @@ const OnYourMind = () => {
         <div className="flex m-6">
           {dishList &&
             dishList.map((dish) => (
-              <DishCard dishInfo={dish} key={dish.imageId} />
+              <Link
+                to={"/" + dish.action.link.slice(23, dish.action.link.length)}
+                key={dish.imageId}
+              >
+                <DishCard dishInfo={dish} />
+              </Link>
             ))}
         </div>
       </div>

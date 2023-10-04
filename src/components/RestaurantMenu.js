@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useRestaurantMenu from "../utils/useRestaurantMenu";
 import RestaurantCategory from "./RestaurantCategory";
 import RestaurantOfferCard from "./RestaurantOfferCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, clearCart } from "../utils/cartSlice";
+
 const RestaurantMenu = () => {
   const [isVeg, setIsVeg] = useState(false);
   const { resId } = useParams();
   //Custom Hook
   const resInfo = useRestaurantMenu(resId);
   const [showIndex, setShowIndex] = useState(0);
-  // const [isAddedToCart, setIsAddedToCart] = useState(true);
+  const [isConflictItemAddedToCart, setIsConflictItemAddedToCart] =
+    useState(true);
+  const [isItemAddedToCart, setIsItemAddedToCart] = useState(false);
+  const [itemToAddToCart, setItemToAddToCart] = useState(null);
+  const dispatch = useDispatch();
 
+  const cart = useSelector((store) => store.cart);
+
+  const cartLength = cart.items.reduce(
+    (accumulator, current) => accumulator + current.amount,
+    0
+  );
+  const totalAmount = cart.totalAmount;
   if (resInfo === null) {
     return <Shimmer />;
   }
@@ -32,20 +45,26 @@ const RestaurantMenu = () => {
   const offers =
     resInfo?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.offers;
 
-  // const showPopup = (resId, resIdFromStore) => {
-  //   console.log("Divya", resId, resIdFromStore);
-  //   if (resId === resIdFromStore || resIdFromStore === null) {
-  //     setIsAddedToCart(true);
-  //   } else {
-  //     setIsAddedToCart(false);
-  //   }
-  // };
+  const showConflictPopup = (resId, resIdFromStore) => {
+    if (resId === resIdFromStore || resIdFromStore === null) {
+      setIsConflictItemAddedToCart(true);
+    } else {
+      setIsConflictItemAddedToCart(false);
+    }
+  };
+
+  const showItemAddToCartPopup = () => {
+    setIsItemAddedToCart(true);
+  };
+  const setItemHandler = (item) => {
+    setItemToAddToCart(item);
+  };
   return (
-    <div className="flex flex-col items-center relative">
+    <div className="flex flex-col">
       <div className="flex justify-center">
         <div className="flex flex-col w-3/5">
           <div className="flex flex-col p-4">
-            <h1 className="font-bold my-6 text-2xl">{name}</h1>
+            <h1 className="font-semibold my-6 text-2xl">{name}</h1>
             <p className="text-gray-400">{cuisines.join(", ")}</p>
             <p className="text-gray-400 mb-8">{areaName}</p>
             <hr className=""></hr>
@@ -66,18 +85,22 @@ const RestaurantMenu = () => {
             </p>
             <div className="flex overflow-x-scroll">
               <div className="flex">
-                {offers.map(
-                  (offer) =>
-                    offer?.info?.couponCode && (
-                      <RestaurantOfferCard offer={offer} key={Math.random()} />
-                    )
-                )}
+                {offers &&
+                  offers.map(
+                    (offer) =>
+                      offer?.info?.couponCode && (
+                        <RestaurantOfferCard
+                          offer={offer}
+                          key={Math.random()}
+                        />
+                      )
+                  )}
               </div>
             </div>
           </div>
 
           <div className="flex items-center transition-all mb-4">
-            <p className="mr-2 px-4 font-bold text-xl">Veg Only </p>
+            <p className="mr-2 px-4 font-semibold text-xl">Veg Only </p>
             {!isVeg ? (
               <div
                 className="w-12 h-6 bg-gray-300 cursor-pointer border border-black rounded-md flex items-center justify-start"
@@ -103,33 +126,37 @@ const RestaurantMenu = () => {
           <hr className=""></hr>
           <div className="">
             {/* categories accordions */}
-            {categories.map((category, index) => (
-              // Cotrolled component
-              <RestaurantCategory
-                data={category?.card?.card}
-                key={category?.card?.card?.title}
-                showItems={index === showIndex && true}
-                isVeg={isVeg}
-                resId={resId}
-                // showPopup={showPopup}
-                setShowIndex={() => {
-                  setShowIndex(index);
-                }}
-              />
-            ))}
+            {categories &&
+              categories.map((category, index) => (
+                // Cotrolled component
+                <RestaurantCategory
+                  data={category?.card?.card}
+                  key={category?.card?.card?.title}
+                  showItems={index === showIndex && true}
+                  isVeg={isVeg}
+                  resId={resId}
+                  showConflictPopup={showConflictPopup}
+                  showItemAddToCartPopup={showItemAddToCartPopup}
+                  setItemHandler={setItemHandler}
+                  setShowIndex={() => {
+                    setShowIndex(index);
+                  }}
+                />
+              ))}
             {/* <h2>Menu</h2>
-      <ul>
-        {itemCards.map((item) => (
-          <li key={item.card.info.id}>
-            {item.card.info.name} - {"Rs."} {item.card.info.price / 100}. {"00"}
-          </li>
-        ))}
-      </ul> */}
+        <ul>
+          {itemCards.map((item) => (
+            <li key={item.card.info.id}>
+              {item.card.info.name} - {"Rs."} {item.card.info.price / 100}. {"00"}
+            </li>
+          ))}
+        </ul> */}
           </div>
         </div>
       </div>
-      {/* {!isAddedToCart && (
-        <div className="p-6 m-6 w-2/5 bg-white absolute z-10 top-3/4 shadow-2xl">
+
+      {!isConflictItemAddedToCart && (
+        <div className="p-6 m-6 w-2/5 bg-white fixed top-2/3 left-1/4 ml-24 shadow-2xl">
           <h1 className="font-bold my-2">Items already in cart</h1>
           <p className="my-2 text-gray-600">
             Your cart contains items from other restaurant. Would you like to
@@ -138,16 +165,44 @@ const RestaurantMenu = () => {
           <div className="flex">
             <button
               className="border border-green-400 m-2 p-2 w-48 font-bold text-green-400"
-              onClick={() => setIsAddedToCart(true)}
+              onClick={() => setIsConflictItemAddedToCart(true)}
             >
               NO
             </button>
-            <button className="border border-green-400 m-2 p-2 w-48 font-bold bg-green-400 text-white">
+            <button
+              className="border border-green-400 m-2 p-2 w-48 font-bold bg-green-400 text-white"
+              onClick={() => {
+                setIsConflictItemAddedToCart(true);
+                if (!isConflictItemAddedToCart) {
+                  dispatch(clearCart());
+                  dispatch(addItem(itemToAddToCart));
+                }
+              }}
+            >
               YES, START AFRESH
             </button>
           </div>
         </div>
-      )} */}
+      )}
+      {cartLength && (
+        <div className="flex justify-center">
+          <div className="p-2 m-2 w-3/5 flex justify-between items-center bg-green-400 font-semibold text-white fixed -bottom-1">
+            <div className="flex items-center ">
+              <p className="m-1">{cartLength} Items |</p>
+              <p>₹{totalAmount}</p>
+            </div>
+            <div className="flex items-center">
+              <Link to="/cart">
+                <h1 className="mr-1">VIEW CART</h1>
+              </Link>
+              <img
+                className="h-4 w-4"
+                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_28,h_28/ChatbotAssets/Checkout_Cart"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

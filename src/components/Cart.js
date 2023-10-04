@@ -73,7 +73,7 @@ const Cart = () => {
               </div>
               <div>
                 <button
-                  className="p-2 m-2 bg-red-400 text-white rounded-lg"
+                  className="p-2 m-2 bg-red-400 text-white rounded-lg w-36"
                   onClick={handleClearCart}
                 >
                   Clear Cart

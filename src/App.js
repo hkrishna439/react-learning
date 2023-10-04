@@ -13,6 +13,7 @@ import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import Cart from "./components/Cart";
 import SearchFilter from "./components/SearchFilter";
+import RestaurantsListByDish from "./components/RestaurantsListByDish";
 
 // import Grocerry from "./components/Grocerry";
 
@@ -72,6 +73,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/restaurants/:resId",
         element: <RestaurantMenu />,
+      },
+      {
+        path: "/collections/:collectionId",
+        element: <RestaurantsListByDish />,
       },
       {
         path: "/grocerry",

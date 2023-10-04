@@ -4,7 +4,13 @@ import { CDN_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../utils/cartSlice";
 
-const ItemList = ({ items, resId, showPopup }) => {
+const ItemList = ({
+  items,
+  resId,
+  showConflictPopup,
+  showItemAddToCartPopup,
+  setItemHandler,
+}) => {
   const dispatch = useDispatch();
   const resIdFromStore = useSelector((store) => store.cart.resId);
   const handleAddItem = (item) => {
@@ -53,7 +59,18 @@ const ItemList = ({ items, resId, showPopup }) => {
                 className="px-6 py-2 bg-white text-green-400 shadow-lg font-bold mt-20 rounded-lg"
                 onClick={() => {
                   handleAddItem(item);
-                  // showPopup(resId, resIdFromStore);
+                  showConflictPopup(resId, resIdFromStore);
+                  setItemHandler({
+                    item: { item: item, amount: 1 },
+                    price: parseFloat(
+                      (item.card.info.price
+                        ? item.card.info.price / 100
+                        : item.card.info.defaultPrice / 100
+                      ).toFixed(2)
+                    ),
+                    resId: resId,
+                  });
+                  showItemAddToCartPopup();
                 }}
               >
                 ADD+

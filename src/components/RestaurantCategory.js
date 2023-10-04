@@ -6,7 +6,10 @@ const RestaurantCategory = ({
   showItems,
   isVeg,
   resId,
-  showPopup,
+  showConflictPopup,
+  showItemAddToCartPopup,
+  isConflictItemAddedToCart,
+  setItemHandler,
   setShowIndex,
 }) => {
   const filteredVegItems = data.itemCards.filter((item) =>
@@ -42,7 +45,9 @@ const RestaurantCategory = ({
             <ItemList
               items={filteredVegItems}
               resId={resId}
-              // showPopup={showPopup}
+              showConflictPopup={showConflictPopup}
+              showItemAddToCartPopup={showItemAddToCartPopup}
+              setItemHandler={setItemHandler}
             />
           )}
         </div>

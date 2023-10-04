@@ -14,3 +14,6 @@ export const FETCH_DATA_API =
   "https://www.swiggy.com/dapi/restaurants/list/v5?lat=13.0155936&lng=77.6836362&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
 
 //Named exports
+
+export const FETCH_DATA_BY_DISH =
+  "https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.411599&lng=78.517966";
