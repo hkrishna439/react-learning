@@ -36,8 +36,8 @@ const ItemCard = ({ cartItem }) => {
       <div className="mr-6">
         ₹
         {cartItem?.item?.card?.info?.price
-          ? cartItem?.item?.card?.info?.price / 100
-          : cartItem?.item.card?.info?.defaultPrice / 100}
+          ? (cartItem?.item?.card?.info?.price / 100) * cartItem.amount
+          : (cartItem?.item.card?.info?.defaultPrice / 100) * cartItem.amount}
       </div>
     </div>
   );
