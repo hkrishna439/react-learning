@@ -33,7 +33,7 @@ const ItemCard = ({ cartItem }) => {
           +
         </span>
       </div>
-      <div className="mr-6">
+      <div className="mr-4">
         ₹
         {cartItem?.item?.card?.info?.price
           ? (cartItem?.item?.card?.info?.price / 100) * cartItem.amount

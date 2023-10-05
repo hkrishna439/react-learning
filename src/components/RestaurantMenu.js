@@ -156,7 +156,7 @@ const RestaurantMenu = () => {
       </div>
 
       {!isConflictItemAddedToCart && (
-        <div className="p-6 m-6 w-2/5 bg-white fixed top-2/3 left-1/4 ml-24 shadow-2xl">
+        <div className="p-6 m-6 w-2/5 bg-white fixed top-2/3 left-1/4 ml-24 shadow-2xl z-10">
           <h1 className="font-bold my-2">Items already in cart</h1>
           <p className="my-2 text-gray-600">
             Your cart contains items from other restaurant. Would you like to

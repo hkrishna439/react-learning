@@ -90,7 +90,7 @@ const Cart = () => {
             </div>
             <hr className="border border-solid border-black h-1 bg-black" />
 
-            <div className="my-2 font-bold flex justify-between">
+            <div className="my-2 mr-4 font-bold flex justify-between">
               <span>TO PAY</span>
               <span>₹{cartStore.totalAmount}</span>
             </div>
