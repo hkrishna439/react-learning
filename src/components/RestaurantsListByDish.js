@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { FETCH_DATA_BY_DISH } from "../utils/constants";
-import DishRestaurantCard from "./DishRestaurantCard";
+import RestaurantCard from "./RestaurantCard";
 
 const RestaurantsListByDish = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [resListFilteredByDish, setResListFilteredByDish] = useState([]);
-  const [headingAndFilters, setHeadingAndFilters] = useState([]);
+  const [heading, setHeading] = useState([]);
   const collectionId = searchParams.get("collection_id");
   const tags = searchParams.get("tags");
   const type = searchParams.get("type");
@@ -28,19 +28,21 @@ const RestaurantsListByDish = () => {
     const json = await data.json();
 
     setResListFilteredByDish(
-      json.data.cards.filter((card, index) => index > 2)
+      json.data.cards.filter(
+        (card) =>
+          card.card.card["@type"] ===
+          "type.googleapis.com/swiggy.presentation.food.v2.Restaurant"
+      )
     );
-    setHeadingAndFilters(json.data.cards.filter((card, index) => index < 2));
+    setHeading(json.data.cards[0]);
   };
 
   let title,
     description = null;
-  if (headingAndFilters.length !== 0) {
-    console.log("krshna");
-    title = headingAndFilters[0].card.card.title;
-    description = headingAndFilters[0].card.card.description;
+  if (heading.length !== 0) {
+    title = heading.card.card.title;
+    description = heading.card.card.description;
   }
-
   return (
     <div className="my-6 py-6 mx-14 px-14">
       <h1 className="font-bold text-3xl my-2">{title}</h1>
@@ -53,7 +55,7 @@ const RestaurantsListByDish = () => {
               to={"/restaurants/" + res.card.card.info.id}
               key={res.card.card.info.id}
             >
-              <DishRestaurantCard resData={res.card.card.info} />
+              <RestaurantCard resData={res.card.card} />
             </Link>
           ))}
       </div>

@@ -6,7 +6,9 @@ const Footer = () => {
       <div className="flex justify-center">
         <div className="m-8">
           <h1 className="font-bold">Copy right</h1>
-          <p className="text-gray-500 my-4 mr-4">@ 2023 SNAP MEAL Pvt.Ltd </p>
+          <p className="text-gray-500 my-4 mr-4">
+            @ 2023 created by Krishna 🥘SNAP MEAL{" "}
+          </p>
         </div>
         <div className="m-8">
           <h1 className="font-bold">Company</h1>
